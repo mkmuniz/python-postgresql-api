@@ -1,4 +1,5 @@
 import psycopg2
+import pandas as pd
 
 conexao = psycopg2.connect(database="postgres",
     host="localhost",
@@ -7,4 +8,15 @@ conexao = psycopg2.connect(database="postgres",
     port="5432"
 )
 
-print(conexao.info)
+cursor = conexao.cursor()
+cursor.execute('SELECT * FROM users')
+
+dados = cursor.fetchall()
+colunas = []
+
+for col in cursor.description:
+    colunas.append(col[0])
+
+df_users = pd.DataFrame(data = dados, columns = colunas)
+
+print(df_users)
