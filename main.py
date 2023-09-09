@@ -1,11 +1,16 @@
 import psycopg2
 import pandas as pd
+import matplotlib.pyplot as plt
+import os 
+from dotenv import load_dotenv, dotenv_values
 
-conexao = psycopg2.connect(database="postgres",
-    host="localhost",
-    user="postgres",
-    password="512834",
-    port="5432"
+load_dotenv()
+
+conexao = psycopg2.connect(os.getenv('DATABASE_NAME'),
+    host=os.getenv('DATABASE_HOST'),
+    user=os.getenv('DATABASE_USER'),
+    password=os.getenv('DATABASE_PASSWORD'),
+    port=os.getenv('DATABASE_PORT')
 )
 
 cursor = conexao.cursor()
@@ -19,4 +24,8 @@ for col in cursor.description:
 
 df_users = pd.DataFrame(data = dados, columns = colunas)
 
-print(df_users)
+plt.bar(df_users['column_name'], df_users['column_name'])
+plt.show()
+
+plt.pie(df_users['column_name'], labels=df_users['column_name'])
+plt.show()
